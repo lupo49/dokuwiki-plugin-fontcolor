@@ -21,7 +21,9 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      *
      * @return string
      */
-    public function getType(){ return 'formatting'; }
+    public function getType() {
+        return 'formatting';
+    }
 
     /**
      * What kind of syntax do we allow (optional)
@@ -37,14 +39,18 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      *
      * @return string
      */
-    public function getPType(){ return 'normal'; }
+    public function getPType() {
+        return 'normal';
+    }
 
     /**
      * Where to sort in?
      *
      * @return int
      */
-    public function getSort(){ return 90; }
+    public function getSort() {
+        return 90;
+    }
 
     /**
      * Connect pattern to lexer
@@ -52,13 +58,14 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param string $mode
      */
     public function connectTo($mode) {
-      $this->Lexer->addEntryPattern('<fc.*?>(?=.*?</fc>)',$mode,'plugin_fontcolor');
-        $this->Lexer->addEntryPattern('<FC.*?>(?=.*?</FC>)',$mode,'plugin_fontcolor');
+        $this->Lexer->addEntryPattern('<fc.*?>(?=.*?</fc>)', $mode, 'plugin_fontcolor');
+        $this->Lexer->addEntryPattern('<FC.*?>(?=.*?</FC>)', $mode, 'plugin_fontcolor');
 
     }
+
     public function postConnect() {
-      $this->Lexer->addExitPattern('</fc>','plugin_fontcolor');
-        $this->Lexer->addExitPattern('</FC>','plugin_fontcolor');
+        $this->Lexer->addExitPattern('</fc>', 'plugin_fontcolor');
+        $this->Lexer->addExitPattern('</FC>', 'plugin_fontcolor');
     }
 
     /**
@@ -68,34 +75,34 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @return bool
      */
     function accepts($mode) {
-        if ($mode == 'plugin_fontcolor') return true;
+        if($mode == 'plugin_fontcolor') return true;
         return parent::accepts($mode);
     }
 
     /**
      * Handle the match
      *
-     * @param   string       $match   The text matched by the patterns
-     * @param   int          $state   The lexer state for the match
-     * @param   int          $pos     The character position of the matched text
+     * @param   string $match The text matched by the patterns
+     * @param   int $state The lexer state for the match
+     * @param   int $pos The character position of the matched text
      * @param   Doku_Handler $handler The Doku_Handler object
      * @return  array Return an array with all data you want to use in render
      */
-    public function handle($match, $state, $pos, $handler){
-        switch ($state) {
-          case DOKU_LEXER_ENTER :
-            $color = substr($match, 4, -1);// get the color
-            if ( $this->_isValid($color) ) return array($state, $color);
-            break;
-          case DOKU_LEXER_MATCHED :
-            break;
-          case DOKU_LEXER_UNMATCHED :
-              $handler->_addCall('cdata', array($match), $pos);
-              return false;
-          case DOKU_LEXER_EXIT :
-            break;
-          case DOKU_LEXER_SPECIAL :
-            break;
+    public function handle($match, $state, $pos, $handler) {
+        switch($state) {
+            case DOKU_LEXER_ENTER :
+                $color = substr($match, 4, -1); // get the color
+                if($this->_isValid($color)) return array($state, $color);
+                break;
+            case DOKU_LEXER_MATCHED :
+                break;
+            case DOKU_LEXER_UNMATCHED :
+                $handler->_addCall('cdata', array($match), $pos);
+                return false;
+            case DOKU_LEXER_EXIT :
+                break;
+            case DOKU_LEXER_SPECIAL :
+                break;
         }
         return array($state, "#ff0");
     }
@@ -109,24 +116,24 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @return  boolean                 rendered correctly?
      */
     public function render($mode, $renderer, $data) {
-        if($mode == 'xhtml'){
+        if($mode == 'xhtml') {
             /** @var $renderer Doku_Renderer_xhtml */
-          list($state, $color) = $data;
-          switch ($state) {
-            case DOKU_LEXER_ENTER :
-              $renderer->doc .= "<span style=\"color: $color\">";
-              break;
-            case DOKU_LEXER_MATCHED :
-              break;
-            case DOKU_LEXER_UNMATCHED :
-              break;
-            case DOKU_LEXER_EXIT :
-              $renderer->doc .= "</span>";
-              break;
-            case DOKU_LEXER_SPECIAL :
-              break;
-          }
-          return true;
+            list($state, $color) = $data;
+            switch($state) {
+                case DOKU_LEXER_ENTER :
+                    $renderer->doc .= "<span style=\"color: $color\">";
+                    break;
+                case DOKU_LEXER_MATCHED :
+                    break;
+                case DOKU_LEXER_UNMATCHED :
+                    break;
+                case DOKU_LEXER_EXIT :
+                    $renderer->doc .= "</span>";
+                    break;
+                case DOKU_LEXER_SPECIAL :
+                    break;
+            }
+            return true;
         }
         return false;
     }
