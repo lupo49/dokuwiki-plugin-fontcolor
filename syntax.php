@@ -59,13 +59,13 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      */
     public function connectTo($mode) {
         $this->Lexer->addEntryPattern('<fc.*?>(?=.*?</fc>)', $mode, 'plugin_fontcolor');
-        $this->Lexer->addEntryPattern('<FC.*?>(?=.*?</FC>)', $mode, 'plugin_fontcolor');
+        /* $this->Lexer->addEntryPattern('<FC.*?>(?=.*?</FC>)', $mode, 'plugin_fontcolor'); */
 
     }
 
     public function postConnect() {
         $this->Lexer->addExitPattern('</fc>', 'plugin_fontcolor');
-        $this->Lexer->addExitPattern('</FC>', 'plugin_fontcolor');
+        //$this->Lexer->addExitPattern('</FC>', 'plugin_fontcolor');
     }
 
     /**
@@ -91,17 +91,16 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
     public function handle($match, $state, $pos, $handler) {
         switch($state) {
             case DOKU_LEXER_ENTER :
-                $color = substr($match, 4, -1); // get the color
-                if($this->_isValid($color)) return array($state, $color);
-                break;
-            case DOKU_LEXER_MATCHED :
+                $color = trim(substr($match, 4, -1)); // get the color
+                $color = $this->_color2hexdec($color);
+                if($color) {
+                    return array($state, $color);
+                }
                 break;
             case DOKU_LEXER_UNMATCHED :
                 $handler->_addCall('cdata', array($match), $pos);
                 return false;
             case DOKU_LEXER_EXIT :
-                break;
-            case DOKU_LEXER_SPECIAL :
                 break;
         }
         return array($state, "#ff0");
@@ -123,19 +122,61 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
                 case DOKU_LEXER_ENTER :
                     $renderer->doc .= "<span style=\"color: $color\">";
                     break;
-                case DOKU_LEXER_MATCHED :
-                    break;
-                case DOKU_LEXER_UNMATCHED :
-                    break;
                 case DOKU_LEXER_EXIT :
                     $renderer->doc .= "</span>";
                     break;
-                case DOKU_LEXER_SPECIAL :
+            }
+            return true;
+        }
+        if($mode == 'odt') {
+            /** @var $renderer renderer_plugin_odt */
+            list($state, $color) = $data;
+            switch($state) {
+                case DOKU_LEXER_ENTER :
+                    $style_index = $color;
+
+                    //store style
+                    if(empty($this->odt_styles[$style_index])) {
+                        $stylename = "ColorizedText" . count($this->odt_styles);
+                        $this->odt_styles[$style_index] = $stylename;
+
+                        //Attention: ODT only accepts hexidecimal colors
+                        $color = $color ? 'fo:color="' . $color . '" ' : '';
+                        $renderer->autostyles[$stylename] = '
+        <style:style style:name="' . $stylename . '" style:family="text">
+            <style:text-properties ' . $color . '/>
+        </style:style>';
+                    }
+
+                    $renderer->doc .= '<text:span text:style-name="' . $this->odt_styles[$style_index] . '">';
+                    break;
+                case DOKU_LEXER_EXIT :
+                    $renderer->doc .= "</text:span>";
                     break;
             }
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns #hexdec color code, or false
+     *
+     * @param string $color
+     * @return bool|string
+     */
+    public function _color2hexdec($color) {
+        $less = new lessc();
+        $less->importDir[] = DOKU_INC;
+
+        $css = '.test { color: spin('.$color.', 0); }';  //less try to spin all colors, and output them as hexdec
+        try {
+            $parsedcss =  $less->compile($css);
+        } catch(Exception $e) {
+            return false;
+        }
+        $hexdec = substr($parsedcss, 17, -4);
+        return $hexdec;
     }
 
     /**
