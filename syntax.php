@@ -4,7 +4,7 @@
  *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     modified by ThorstenStratmann <thorsten.stratmann@web.de>
- * @link       http://www.dokuwiki.org/plugin:fontcolor
+ * @link       https://www.dokuwiki.org/plugin:fontcolor
  * @version    3.1
  */
 
@@ -103,7 +103,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
             case DOKU_LEXER_EXIT :
                 break;
         }
-        return array($state, "#ff0");
+        return array($state, "#ffff00");
     }
 
     /**
@@ -140,7 +140,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
                         $stylename = "ColorizedText" . count($this->odt_styles);
                         $this->odt_styles[$style_index] = $stylename;
 
-                        //Attention: ODT only accepts hexidecimal colors
+                        //Attention: ODT only accepts hexidecimal colors of format #ffffff, not #fff.
                         $color = $color ? 'fo:color="' . $color . '" ' : '';
                         $renderer->autostyles[$stylename] = '
         <style:style style:name="' . $stylename . '" style:family="text">
