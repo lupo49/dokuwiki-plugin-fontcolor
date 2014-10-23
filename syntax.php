@@ -74,7 +74,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param string $mode
      * @return bool
      */
-    function accepts($mode) {
+    public function accepts($mode) {
         if($mode == 'plugin_fontcolor') return true;
         return parent::accepts($mode);
     }
@@ -165,7 +165,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param string $color
      * @return bool|string
      */
-    public function _color2hexdec($color) {
+    protected function _color2hexdec($color) {
         $less = new lessc();
         $less->importDir[] = DOKU_INC;
 
@@ -188,7 +188,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param string $c
      * @return int
      */
-    public function _isValid($c) {
+    protected function _isValid($c) {
 
         $c = trim($c);
 
