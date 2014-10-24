@@ -16,6 +16,8 @@ if(!defined('DOKU_INC')) die();
  */
 class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
 
+    protected $odt_styles;
+
     /**
      * What kind of syntax are we?
      *
