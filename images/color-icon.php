@@ -11,4 +11,5 @@ if ($isSameHost && $isColorSet) {
     header('Content-type: image/png');
     header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 60*60*24*365) . ' GMT');
     imagepng($img);
+    imagedestroy($img);
 }
