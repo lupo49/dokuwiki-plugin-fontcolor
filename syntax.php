@@ -90,7 +90,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param   Doku_Handler $handler The Doku_Handler object
      * @return  array Return an array with all data you want to use in render
      */
-    public function handle($match, $state, $pos, $handler) {
+    public function handle($match, $state, $pos, Doku_Handler $handler) {
         switch($state) {
             case DOKU_LEXER_ENTER :
                 $color = trim(substr($match, 4, -1)); // get the color
@@ -116,7 +116,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @param   $data     array         data created by handler()
      * @return  boolean                 rendered correctly?
      */
-    public function render($mode, $renderer, $data) {
+    public function render($mode, Doku_Renderer $renderer, $data) {
         if($mode == 'xhtml') {
             /** @var $renderer Doku_Renderer_xhtml */
             list($state, $color) = $data;
