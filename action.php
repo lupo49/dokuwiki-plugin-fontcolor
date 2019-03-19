@@ -56,7 +56,7 @@ class action_plugin_fontcolor extends DokuWiki_Action_Plugin {
         $button = array(
             'type' => 'picker',
             'title' => 'Font color',
-            'icon' => '../../plugins/fontcolor/images/toolbar_icon.png',
+            'icon' => '/lib/plugins/fontcolor/images/toolbar_icon.png',
             'list' => array()
         );
 
@@ -64,7 +64,7 @@ class action_plugin_fontcolor extends DokuWiki_Action_Plugin {
             $button['list'] [] = array(
                 'type' => 'format',
                 'title' => $colorName,
-                'icon' => '../../plugins/fontcolor/images/color-icon.php?color='
+                'icon' => '/lib/plugins/fontcolor/images/color-icon.php?color='
                     . substr($colorValue, 1),
                 'open' => '<fc ' . $colorValue . '>',
                 'close' => '</fc>'
