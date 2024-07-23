@@ -10,6 +10,8 @@
 
 if(!defined('DOKU_INC')) die();
 
+use LesserPHP\Lessc;
+
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
  * need to inherit from this class
@@ -168,8 +170,8 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
      * @return bool|string
      */
     protected function _color2hexdec($color) {
-        $less = new lessc();
-        $less->importDir[] = DOKU_INC;
+        $less = new Lessc();
+        $less->setImportDir[] = DOKU_INC;
 
         $css = '.test { color: spin('.$color.', 0); }';  //less try to spin all colors, and output them as hexdec
         try {
