@@ -1,0 +1,9 @@
+{
+    "name": "lupo49/dokuwiki-plugin-fontcolor",
+    "description": "Text in various colors",
+    "type": "project",
+    "license": "GPL2",
+    "require": {
+        "splitbrain/lesserphp": "*"
+    }
+}
