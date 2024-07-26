@@ -1,7 +1,7 @@
 base   fontcolor
 author Thorsten Stratmann
 email  Thorsten.Stratmann@web.de
-date   2014-10-24
+date   2017-09-03
 name   fontcolor plugin
 desc   Write text in various colors
 url    https://www.dokuwiki.org/plugin:fontcolor

@@ -133,7 +133,7 @@ class syntax_plugin_fontcolor extends DokuWiki_Syntax_Plugin {
             return true;
         }
         if($mode == 'odt') {
-            /** @var $renderer renderer_plugin_odt */
+            /** @var $renderer renderer_plugin_odt_page */
             list($state, $color) = $data;
             switch($state) {
                 case DOKU_LEXER_ENTER :
